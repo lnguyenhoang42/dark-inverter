@@ -3,6 +3,7 @@ html {
 }
 body {
   filter: invert(100%) hue-rotate(180deg) !important;
+  background: #fff !important;
 }
 img, canvas, svg {
   filter: invert(100%) hue-rotate(180deg) !important;
@@ -18,6 +19,12 @@ video:-webkit-full-screen,
 }
 iframe {
   filter: invert(100%) hue-rotate(180deg) !important;
+}
+iframe:fullscreen,
+iframe:-webkit-full-screen,
+:fullscreen iframe,
+:-webkit-full-screen iframe {
+  filter: none !important;
 }
 [style*="background-image"] {
   filter: invert(100%) hue-rotate(180deg) !important;
