@@ -5,25 +5,31 @@ body {
   filter: invert(100%) hue-rotate(180deg) !important;
   background: #fff !important;
 }
-img, canvas, svg {
+img, canvas, svg, embed, object {
   filter: invert(100%) hue-rotate(180deg) !important;
 }
 video {
   filter: invert(100%) hue-rotate(180deg) !important;
 }
-video:fullscreen,
-video:-webkit-full-screen,
-:fullscreen video,
-:-webkit-full-screen video {
-  filter: none !important;
-}
 iframe {
   filter: invert(100%) hue-rotate(180deg) !important;
 }
+video:fullscreen,
+video:-webkit-full-screen,
+:fullscreen video,
+:-webkit-full-screen video,
 iframe:fullscreen,
 iframe:-webkit-full-screen,
 :fullscreen iframe,
-:-webkit-full-screen iframe {
+:-webkit-full-screen iframe,
+embed:fullscreen,
+embed:-webkit-full-screen,
+:fullscreen embed,
+:-webkit-full-screen embed,
+object:fullscreen,
+object:-webkit-full-screen,
+:fullscreen object,
+:-webkit-full-screen object {
   filter: none !important;
 }
 [style*="background-image"] {

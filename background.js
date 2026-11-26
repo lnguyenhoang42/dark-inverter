@@ -21,7 +21,9 @@ async function applyFilter(tabId) {
     const { darkSites = [], overrides = {} } = await chrome.storage.local.get(["darkSites", "overrides"]);
     const shouldHave = darkSites.includes(new URL(tab.url).origin);
     const css = await loadCSS();
-    const siteOverrides = overrides[new URL(tab.url).origin] || [];
+    const siteOverrides = (typeof overrides === "object" && !Array.isArray(overrides))
+      ? (overrides[new URL(tab.url).origin] || [])
+      : [];
 
     await chrome.scripting.executeScript({
       target: { tabId },
@@ -34,7 +36,7 @@ async function applyFilter(tabId) {
             s.textContent = cssText;
             document.head.appendChild(s);
           }
-          document.querySelectorAll('img, canvas, svg').forEach(e => {
+          document.querySelectorAll('img, canvas, svg, embed, object').forEach(e => {
             e.style.setProperty('filter', 'invert(100%) hue-rotate(180deg)', 'important');
           });
           document.querySelectorAll('video').forEach(e => {
@@ -42,31 +44,31 @@ async function applyFilter(tabId) {
             e.style.removeProperty('background');
           });
           if (overrides) {
-			for (const o of overrides) {
-			  if (!o.enabled) continue;
-			  try {
-				document.querySelectorAll(o.selector).forEach(e => {
-				  e.style.setProperty('filter', 'none', 'important');
-				});
-			  } catch (e) {}
-			}
-		  }
+            for (const o of overrides) {
+              if (!o.enabled) continue;
+              try {
+                document.querySelectorAll(o.selector).forEach(e => {
+                  e.style.setProperty('filter', 'none', 'important');
+                });
+              } catch (e) {}
+            }
+          }
         } else {
           if (el) el.remove();
-          document.querySelectorAll('img, canvas, svg, video').forEach(e => {
+          document.querySelectorAll('img, canvas, svg, video, embed, object').forEach(e => {
             e.style.removeProperty('filter');
             e.style.removeProperty('background');
           });
           if (overrides) {
-			for (const o of overrides) {
-			  if (!o.enabled) continue;
-			  try {
-				document.querySelectorAll(o.selector).forEach(e => {
-				  e.style.removeProperty('filter');
-				});
-			  } catch (e) {}
-			}
-		  }   
+            for (const o of overrides) {
+              if (!o.enabled) continue;
+              try {
+                document.querySelectorAll(o.selector).forEach(e => {
+                  e.style.removeProperty('filter');
+                });
+              } catch (e) {}
+            }
+          }
         }
       },
       args: [shouldHave, css, siteOverrides]
@@ -111,7 +113,6 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     chrome.storage.local.get("overrides", async ({ overrides = {} }) => {
       if (Array.isArray(overrides)) overrides = {};
       if (!overrides[origin]) overrides[origin] = [];
-      // Skip if same selector already exists
       const exists = overrides[origin].some(o => o.selector === msg.selector);
       if (!exists) {
         overrides[origin].push({ selector: msg.selector, tag: msg.tag, enabled: true });
