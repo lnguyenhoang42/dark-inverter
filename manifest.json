@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Dark Inverter",
+  "version": "1.0.0",
+  "permissions": ["storage", "scripting", "tabs"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "commands": {
+    "toggle-dark": {
+      "suggested_key": { "default": "Alt+Shift+D" },
+      "description": "Toggle dark mode on current site"
+    }
+  }
+}
