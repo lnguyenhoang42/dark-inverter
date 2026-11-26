@@ -10,4 +10,14 @@ Invert any site color you want with just a click. Designed for site that forced 
 - Work partially on video media.
 - Filter and pick element that need to be inverted.
 
+| Element | CSS re-invert | JS inline | Fullscreen exempt |
+|---------|:---:|:---:|:---:|
+| `img` | ✓ | ✓ | — |
+| `svg` | ✓ | ✓ | — |
+| `canvas` | ✓ | ✓ | — |
+| `video` | ✓ | — (CSS only) | ✓ |
+| `iframe` | ✓ | — (CSS only) | ✓ |
+| `embed` | ✓ | ✓ | ✓ |
+| `object` | ✓ | ✓ | ✓ |   
+
 If you want dark-mode for cloudflare error check here: https://gist.github.com/lnguyenhoang42/ffe5d4d96d14a4b39f3af5e134663d66
