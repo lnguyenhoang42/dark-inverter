@@ -3,20 +3,25 @@ html {
 }
 body {
   filter: invert(100%) hue-rotate(180deg) !important;
-  background: #fff !important;
 }
-img, video, canvas, svg {
+img, canvas, svg {
   filter: invert(100%) hue-rotate(180deg) !important;
-  background: #fff !important;
+}
+video {
+  filter: invert(100%) hue-rotate(180deg) !important;
+}
+video:fullscreen,
+video:-webkit-full-screen,
+:fullscreen video,
+:-webkit-full-screen video {
+  filter: none !important;
 }
 iframe {
   filter: invert(100%) hue-rotate(180deg) !important;
 }
 [style*="background-image"] {
   filter: invert(100%) hue-rotate(180deg) !important;
-  background-color: #fff !important;
 }
 [data-v-] img, [data-v-] svg {
   filter: invert(100%) hue-rotate(180deg) !important;
-  background: #fff !important;
 }
