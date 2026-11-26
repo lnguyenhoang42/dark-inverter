@@ -7,5 +7,7 @@ Invert any site color you want with just a click. Designed for site that forced 
 ## Feature
 - Save site toggle locally.
 - Assumingly work on any site, even toggle white-mode if you are a maniac.
+- Work partially on video media.
+- Filter and pick element that need to be inverted.
 
 If you want dark-mode for cloudflare error check here: https://gist.github.com/lnguyenhoang42/ffe5d4d96d14a4b39f3af5e134663d66
