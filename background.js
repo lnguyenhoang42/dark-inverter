@@ -1,5 +1,7 @@
 // background.js
 
+const COUNTER_INVERTED = new Set(['IMG', 'CANVAS', 'SVG', 'EMBED', 'OBJECT', 'VIDEO', 'IFRAME']);
+
 async function updateBadge() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab?.url || !/^https?:/.test(tab.url)) return;
@@ -28,6 +30,8 @@ async function applyFilter(tabId) {
     await chrome.scripting.executeScript({
       target: { tabId },
       func: (apply, cssText, overrides) => {
+        const COUNTER_INVERTED = new Set(['IMG', 'CANVAS', 'SVG', 'EMBED', 'OBJECT', 'VIDEO', 'IFRAME']);
+
         const el = document.getElementById("dark-inverter-style");
         if (apply) {
           if (!el) {
@@ -43,12 +47,24 @@ async function applyFilter(tabId) {
             e.style.removeProperty('filter');
             e.style.removeProperty('background');
           });
+		  // Counter-invert elements with CSS background images
+		  document.querySelectorAll('*').forEach(e => {
+			const bg = getComputedStyle(e).backgroundImage;
+			if (bg && bg !== 'none') {
+			  e.style.setProperty('filter', 'invert(100%) hue-rotate(180deg)', 'important');
+			}
+		  });
           if (overrides) {
             for (const o of overrides) {
               if (!o.enabled) continue;
               try {
                 document.querySelectorAll(o.selector).forEach(e => {
-                  e.style.setProperty('filter', 'none', 'important');
+                  const tag = e.tagName.toUpperCase();
+                  if (COUNTER_INVERTED.has(tag)) {
+                    e.style.setProperty('filter', 'none', 'important');
+                  } else {
+                    e.style.setProperty('filter', 'invert(100%) hue-rotate(180deg)', 'important');
+                  }
                 });
               } catch (e) {}
             }
@@ -59,6 +75,11 @@ async function applyFilter(tabId) {
             e.style.removeProperty('filter');
             e.style.removeProperty('background');
           });
+		  document.querySelectorAll('*').forEach(e => {
+			if (e.style.filter === 'invert(100%) hue-rotate(180deg)') {
+			  e.style.removeProperty('filter');
+			}
+		  });
           if (overrides) {
             for (const o of overrides) {
               if (!o.enabled) continue;

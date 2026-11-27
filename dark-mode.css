@@ -32,9 +32,6 @@ object:-webkit-full-screen,
 :-webkit-full-screen object {
   filter: none !important;
 }
-[style*="background-image"] {
-  filter: invert(100%) hue-rotate(180deg) !important;
-}
 [data-v-] img, [data-v-] svg {
   filter: invert(100%) hue-rotate(180deg) !important;
 }
