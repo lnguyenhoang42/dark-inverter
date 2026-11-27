@@ -1,3 +1,5 @@
+// popup.js
+
 const toggle = document.getElementById("toggle");
 
 async function init() {
@@ -35,7 +37,7 @@ document.getElementById("pick").addEventListener("click", async () => {
         border: "2px solid #4a90d9", borderRadius: "2px",
         display: "none", boxShadow: "0 0 0 99999px rgba(0,0,0,0.3)"
       });
-      document.body.appendChild(box);
+      document.documentElement.appendChild(box);
 
       const label = document.createElement("div");
       label.textContent = "Click to select \u00b7 Esc to cancel";
@@ -45,17 +47,21 @@ document.getElementById("pick").addEventListener("click", async () => {
         borderRadius: "4px", zIndex: "2147483647", fontFamily: "sans-serif", fontSize: "13px",
         pointerEvents: "none"
       });
-      document.body.appendChild(label);
+      document.documentElement.appendChild(label);
 
       document.body.style.cursor = "crosshair";
+
+      let currentTarget = null;
 
       function cleanup() {
         box.remove();
         label.remove();
         document.body.style.cursor = "";
+        currentTarget = null;
         document.removeEventListener("click", onClick, true);
         document.removeEventListener("mouseover", onHover, true);
         document.removeEventListener("keydown", onKey, true);
+        document.removeEventListener("scroll", onScroll, true);
       }
 
       function getSelector(el) {
@@ -76,15 +82,25 @@ document.getElementById("pick").addEventListener("click", async () => {
         return parts.join(" > ");
       }
 
-      const onHover = (e) => {
-        const target = document.elementFromPoint(e.clientX, e.clientY);
-        if (!target || target === box || target === label) return;
+      function positionBox(target) {
         const r = target.getBoundingClientRect();
         box.style.display = "block";
         box.style.top = r.top + "px";
         box.style.left = r.left + "px";
         box.style.width = r.width + "px";
         box.style.height = r.height + "px";
+      }
+
+      const onHover = (e) => {
+        const target = document.elementFromPoint(e.clientX, e.clientY);
+        if (!target || target === box || target === label) return;
+        currentTarget = target;
+        positionBox(target);
+      };
+
+      const onScroll = () => {
+        if (!currentTarget) return;
+        positionBox(currentTarget);
       };
 
       const onClick = (e) => {
@@ -108,6 +124,7 @@ document.getElementById("pick").addEventListener("click", async () => {
       document.addEventListener("click", onClick, true);
       document.addEventListener("mouseover", onHover, true);
       document.addEventListener("keydown", onKey, true);
+      document.addEventListener("scroll", onScroll, true);
     },
     args: [origin]
   });
